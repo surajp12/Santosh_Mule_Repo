@@ -1,0 +1,99 @@
+#%RAML 1.0
+title: Investment loan information
+version: v1
+protocols: [HTTPS]
+baseUri: https://mocksvc.mulesoft.com/mocks/647f6b86-8dd0-4dc4-b90d-8929e754158f/api/v1/dda/ # baseUri: https://mocksvc.mulesoft.com/mocks/432218dd-811f-4f74-980a-0a003c0b6c46/api/v1/dda/ # baseUri: /api/v1/dda/
+mediaType: application/json
+description: To Fetch the loan account information from Loan Id
+securitySchemes: 
+  basic:
+    description: 
+      This API supports Basic Authentication.
+    type: Basic Authentication
+
+uses: 
+   library: Entity_Details.raml
+   
+/investments/loans/{loanId}:
+ get:
+  description: "Get investment loan information from Loan Id"
+  securedBy: basic
+  
+  responses: 
+   200:
+    body: 
+      application/json:
+        type: library.investmentLoan
+        example: !include loan_info_example.raml
+   
+   400:
+    body: 
+      application/json:
+         type: library.Error 
+         example: 
+           {
+             "code" : "400",
+             "message": "Loan Id Required"  
+           }
+           
+   401:
+    body: 
+      application/json:
+          type: library.Error
+          example: 
+           {
+            "code" : "401" ,
+            "message": "You are not authorized" 
+           }
+
+   404:
+    body: 
+      application/json:
+        type: library.Error 
+        example: 
+            {
+             "code" : "404",
+             "message": "Loan Id not found" 
+            }
+                  
+   405:
+    body: 
+      application/json:
+        type: library.Error 
+        example: 
+            {
+             "code" : "405",
+             "message": "Method not allowed"  
+           }           
+   
+   500:
+    body: 
+      application/json:
+        type: library.Error
+        example: 
+           {
+             "code" : "500",
+             "message": "Intetrnal Server Error" 
+           }
+
+     
+
+
+
+     
+       
+ 
+     
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+

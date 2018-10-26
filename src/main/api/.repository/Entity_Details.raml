@@ -1,0 +1,149 @@
+#%RAML 1.0 Library
+types: 
+  Identifier:
+    type: string
+    pattern: \d+
+    maxLength: 128  
+ 
+  accountDescriptor: 
+     description: Minimal information about the account
+     type: object
+     properties: 
+       accountId: 
+        type: Identifier
+        required: true
+        description: Long-term persistent identity of the account.Not an account number.This                           identity must be unique to the owning institution.
+       accountType:
+        type: 
+         enum: [401A,401K,403B,AUTOLOAN,CD,CHARGE,CHECKING,COMMERCIALLINEOFCREDIT,                             COMMERCIALLOAN,COVERDELL,CREDITCARD,ESCROW,ESOP,GUARDIAN,HOMEEQUITYLOAN,                       HOMELINEOFCREDIT,INSITUTIONALTRUST INSTALLMENT,IRA,KEOGH,LINEOFCREDIT,LOAN,                    MILATARYLOAN,MONEYMARKET,MORTGAGE,PERSONALLOAN,ROLLOVER, ROTH,SARSEP,SAVINGS,                  SMBLOAN,STUDENTLOAN,TAXABLE,TDA,TRUST,UGMA,UTMA] 
+         required: false 
+         description: Account type
+       displayName:
+        type: string
+        required: true
+        description: Account identity to display to customer
+       description: 
+        type: string
+        required: false
+        description: Description of account
+       accountStatus:
+        type: 
+         enum: [OPEN, CLOSED, PENDINGOPEN, PENDINGCLOSE, DELINQUENT, PAID,                                     NEGATIVECURRENTBALANCE]
+        required: false
+        description: Account status
+
+  account:
+     description: Extends and inherits all fields from AccountDescriptor
+     type: accountDescriptor 
+     properties: 
+      parentAccountId:
+       type: Identifier
+       required: false
+       description: Long-term persistent identity of the parent account.
+      accountNumber: 
+       type: string
+       required: false
+       description: Account number
+      interestRate: 
+       type: number
+       required: false
+       description: Interest Rate of Account      
+  
+  investmentAccount:
+   description: Extends and inherits all fields from Account.
+   type: account
+   properties: 
+        balanceAsOf: 
+         type: datetime
+         required: false
+         description: As-of date for balances
+        currentValue:
+         type:  number
+         required: false
+         description: Total current value of all investments
+                    
+  investmentLoan:
+   description: Investment Loan Information 
+   type: investmentAccount
+   properties: 
+     loanId:
+      type:  string
+      required: true
+      description: Unique identifier for this loan
+     loanDescription: 
+      type:  string
+      required: true
+      description: Description
+     initialLoanBalance:
+      type:  number
+      required: true
+      description: Initial loan balance amount
+     loanStartDate:
+      type:  date-only
+      required: true
+      description: Start date of the loan
+     currentLoanBalance:
+      type:  number
+      required: true
+      description: Current loan principal balance amount
+     dateAsOf:
+      type:  date-only
+      required: true
+      description: Date and time of current loan balance
+     loanRate: 
+      type:  number
+      required: true
+      description: Loan annual interest rate for the loan
+     loanPaymentAmount:
+      type:  number
+      required: true
+      description: Loan payment amount
+     loanPaymentFrequency:
+      type: 
+       enum: [WEEKLY, BIWEEKLY, TWICEMONTHLY, MONTHLY,FOURWEEKS,
+             BIMONTHLY, QUARTERLY, SEMIANNUALLY, ANNUALLY, OTHER]
+      required: true
+      description: Loan Payment Frequency       
+     loanPaymentInitial:
+      type:  number
+      required: true
+      description: Initial number of loan payments
+     loanPaymentsRemaining: 
+      type:  integer
+      required: true
+      description: Remaining number of loan payments
+     loanMaturityDate: 
+      type:  date-only
+      required: true
+      description: Expected loan end date
+     loanInterestToDate: 
+      type:  number
+      required: true
+      description: Total interest paid to date on this loan
+     loanTotalProjectedInterest:
+      type:  number
+      required: true
+      description: Total projected interest to be paid on this loan
+     loanNextPaymentDate:
+      type:  date-only
+      required: true
+      description: The next payment date for the loan
+
+  Error:
+   type: object
+   properties: 
+     code: 
+       type:  string
+       required: true
+       description: Long term persistent identifier which can be used to trace error
+                    condition back to log information
+     message: 
+       type:  string
+       required: true
+       description: End user displayable information which might help the customer
+                     diagnose an error
+  
+
+     
+    
+                 
